@@ -31,7 +31,7 @@ pipeline {
 
     stage('Docker image build and push') {
       steps {
-        node {
+        script {
           docker.withRegistry('https://hub.docker.com', 'docker-hub') {
             def customImage = docker.build("ardydocker/devsecops-application:"+ imageTag)
             customImage.push()
