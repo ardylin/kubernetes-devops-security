@@ -1,6 +1,13 @@
 pipeline {
   agent any
 
+  environment {
+        registry = 'hub.docker.com'
+        registryCredential = 'docker-hub' // Credential ID configured in Jenkins
+        imageName = 'ardydocker/devsecops-application'
+        imageTag = 'latest'
+    }
+
   stages {
 
     stage('Build Artifact - Maven') {
@@ -24,8 +31,14 @@ pipeline {
 
     stage('Docker image build and push') {
       steps {
-        sh 'docker build -t ardydocker/devsecops-application:latest .'
-        sh 'docker push ardydocker/devsecops-application:latest'
+        script {
+            docker.withRegistry('https://' + registry, registryCredential) {
+                def customImage = docker.build("${imageName}:${imageTag}")
+                customImage.push()
+            }
+        }
+        // sh 'docker build -t ardydocker/devsecops-application:latest .'
+        // sh 'docker push ardydocker/devsecops-application:latest'
        }
      }
    }
