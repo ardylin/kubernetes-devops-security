@@ -37,7 +37,7 @@ pipeline {
             sh 'echo $USERNAME'
             sh 'echo $PASSWORD'
             // sh 'docker login -u $USERNAME -p $PASSWORD https://registry.hub.docker.com/v2/'
-            sh 'echo '$PASSWORD' | docker login -u $USERNAME --password-stdin https://registry.hub.docker.com/v2/'
+            sh 'echo $PASSWORD | docker login -u $USERNAME --password-stdin https://registry.hub.docker.com/v2/'
             sh 'docker build -t ardydocker/devsecops-application:lastest .'
             sh 'docker push ardydocker/devsecops-application:lastest'
             // docker.withRegistry('https://registry.hub.docker.com/v2/', 'docker-hub') {
