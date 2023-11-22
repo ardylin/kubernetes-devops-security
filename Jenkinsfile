@@ -6,7 +6,7 @@ pipeline {
         registryCredential = 'docker-hub' // Credential ID configured in Jenkins
         imageName = 'ardydocker/devsecops-application'
         imageTag = 'latest'
-    }
+  }
 
   stages {
 
@@ -31,18 +31,12 @@ pipeline {
 
     stage('Docker image build and push') {
       steps {
-        // script {
-        //     docker.withRegistry('https://' + registry, registryCredential) {
-        //         def customImage = docker.build("${imageName}:${imageTag}")
-        //         customImage.push()
-        //     }
-        // }
         docker.withRegistry([credentialsId: registryCredential, url: 'https://' + registry]){
           sh 'printenv'
           sh 'docker build -t ardydocker/devsecops-application:latest .'
           sh 'docker push ardydocker/devsecops-application:latest'
         }
-       }
-     }
-   }
- }
+      }
+    }
+  }
+}
