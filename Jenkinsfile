@@ -32,13 +32,14 @@ pipeline {
     stage('Docker image build and push') {
       steps {
         script {
+          sh 'printenv'
           withCredentials([usernamePassword(credentialsId: 'docker-hub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
-              sh 'echo $USERNAME'
-              sh 'echo $PASSWORD'
-          }
-          docker.withRegistry('https://registry.hub.docker.com/v2/', 'docker-hub') {
-            def customImage = docker.build("ardydocker/devsecops-application:"+ imageTag)
-            customImage.push()
+            sh 'echo $USERNAME'
+            sh 'echo $PASSWORD'
+            docker.withRegistry('https://registry.hub.docker.com/v2/', 'docker-hub') {
+              def customImage = docker.build("ardydocker/devsecops-application:"+ imageTag)
+              customImage.push()
+            }
           }
         }
       }
