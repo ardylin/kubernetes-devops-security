@@ -24,7 +24,7 @@ pipeline {
 
     stage('Docker image build and push') {
       steps {
-        sh 'docker build -t ardydocker/devsecops-application:latest'
+        sh 'docker build -t ardydocker/devsecops-application:latest .'
         sh 'docker push ardydocker/devsecops-application:latest'
        }
      }
