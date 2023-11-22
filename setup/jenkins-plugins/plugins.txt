@@ -8,4 +8,5 @@ sonar@2.13.1
 pitmutation@1.0-18
 kubernetes-cli@1.10.2
 junit
+docker pipeline
 
