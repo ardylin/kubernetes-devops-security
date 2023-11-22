@@ -36,10 +36,13 @@ pipeline {
           withCredentials([usernamePassword(credentialsId: 'docker-hub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
             sh 'echo $USERNAME'
             sh 'echo $PASSWORD'
-            docker.withRegistry('https://registry.hub.docker.com/v2/', 'docker-hub') {
-              def customImage = docker.build("ardydocker/devsecops-application:"+ imageTag)
-              customImage.push()
-            }
+            sh 'docker login -u $USERNAME -p $PASSWORD https://registry.hub.docker.com/v2/'
+            sh 'docker build -t ardydocker/devsecops-application:lastest .'
+            sh 'docker push ardydocker/devsecops-application:lastest'
+            // docker.withRegistry('https://registry.hub.docker.com/v2/', 'docker-hub') {
+            //   def customImage = docker.build("ardydocker/devsecops-application:"+ imageTag)
+            //   customImage.push()
+            // }
           }
         }
       }
