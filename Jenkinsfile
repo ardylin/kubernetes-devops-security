@@ -31,9 +31,11 @@ pipeline {
 
     stage('Docker image build and push') {
       steps {
-        docker.withRegistry('https://hub.docker.com', 'docker-hub') {
-          def customImage = docker.build("ardydocker/devsecops-application:"+ imageTag)
-          customImage.push()
+        node {
+          docker.withRegistry('https://hub.docker.com', 'docker-hub') {
+            def customImage = docker.build("ardydocker/devsecops-application:"+ imageTag)
+            customImage.push()
+          }
         }
         // withRegistry([credentialsId: registryCredential, url: 'https://' + registry]){
         //   sh 'printenv'
