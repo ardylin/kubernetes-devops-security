@@ -32,8 +32,9 @@ pipeline {
     stage('Docker image build and push') {
       steps {
         script {
-          withCredentials([string(credentialsId: 'docker-hub', variable: 'PW1')]) {
-              echo "My password is '${PW1}'!"
+          withCredentials([usernamePassword(credentialsId: 'docker-hub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+              sh 'echo $USERNAME'
+              sh 'echo $PASSWORD'
           }
           docker.withRegistry('https://registry.hub.docker.com/v2/', 'docker-hub') {
             def customImage = docker.build("ardydocker/devsecops-application:"+ imageTag)
