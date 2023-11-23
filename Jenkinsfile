@@ -2,7 +2,7 @@ pipeline {
   agent any
 
   environment {
-        registry = 'https://registry.hub.docker.com/v2/'
+        registry = 'docker.io'
         registryCredential = 'docker-hub' // Credential ID configured in Jenkins
         imageName = 'ardydocker/devsecops-application'
         imageTag = 'latest'
@@ -36,7 +36,7 @@ pipeline {
           withCredentials([usernamePassword(credentialsId: 'docker-hub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
             sh 'echo $USERNAME'
             sh 'echo $PASSWORD'
-            sh 'echo $PASSWORD | docker login -u $USERNAME --password-stdin https://registry.hub.docker.com/v2/'
+            sh 'echo $PASSWORD | docker login -u $USERNAME --password-stdin docker.io'
             sh 'docker build -t ardydocker/devsecops-application:latest .'
             sh 'docker push ardydocker/devsecops-application:latest'
             // docker.withRegistry('https://registry.hub.docker.com/v2/', 'docker-hub') {
