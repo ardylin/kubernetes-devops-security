@@ -2,7 +2,7 @@ pipeline {
   agent any
 
   environment {
-        registry = 'docker.io'
+        registry = 'https://registry.hub.docker.com/v2/'
         registryCredential = 'docker-hub' // Credential ID configured in Jenkins
         imageName = 'ardydocker/devsecops-application'
         imageTag = 'latest'
@@ -36,7 +36,7 @@ pipeline {
           withCredentials([usernamePassword(credentialsId: 'docker-hub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
             sh 'echo $USERNAME'
             sh 'echo $PASSWORD'
-            sh 'echo $PASSWORD | docker login -u $USERNAME --password-stdin docker.io'
+            sh 'echo $PASSWORD | docker login -u $USERNAME --password-stdin https://registry.hub.docker.com/v2/'
             sh 'docker build -t ardydocker/devsecops-application:latest .'
             sh 'docker push ardydocker/devsecops-application:latest'
             // docker.withRegistry('https://registry.hub.docker.com/v2/', 'docker-hub') {
@@ -51,8 +51,7 @@ pipeline {
     stage('Kubernetes Deployment - DEV') {
       steps {
         withKubeConfig([credentialsId: 'kube-config', serverUrl: '']) {
-          sh "id"
-          sh "sed -i 's#REPLACE_ME#ardydocker/devsecops-application:latest#g' k8s_deployment_service.yaml"
+          sh "sed -i 's#replace#ardydocker/devsecops-application:lastest#g' k8s_deployment_service.yaml"
           sh "kubectl apply -f k8s_deployment_service.yaml"
         }
       }
