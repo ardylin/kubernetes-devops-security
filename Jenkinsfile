@@ -36,7 +36,6 @@ pipeline {
           withCredentials([usernamePassword(credentialsId: 'docker-hub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
             sh 'echo $USERNAME'
             sh 'echo $PASSWORD'
-            // sh 'docker login -u $USERNAME -p $PASSWORD https://registry.hub.docker.com/v2/'
             sh 'echo $PASSWORD | docker login -u $USERNAME --password-stdin https://registry.hub.docker.com/v2/'
             sh 'docker build -t ardydocker/devsecops-application:lastest .'
             sh 'docker push ardydocker/devsecops-application:lastest'
@@ -45,6 +44,15 @@ pipeline {
             //   customImage.push()
             // }
           }
+        }
+      }
+    }
+
+    stage('Kubernetes Deployment - DEV') {
+      steps {
+        withKubeConfig([credentialsId: 'kube-config', serverUrl: '']) {
+          sh "sed -i 's#REPLACE_ME#ardydocker/devsecops-application:lastest#g' k8s_deployment_service.yaml"
+          sh "kubectl apply -f k8s_deployment_service.yaml"
         }
       }
     }
