@@ -51,6 +51,7 @@ pipeline {
     stage('Kubernetes Deployment - DEV') {
       steps {
         withKubeConfig([credentialsId: 'kube-config', serverUrl: '']) {
+          sh "id"
           sh "sed -i 's#REPLACE_ME#ardydocker/devsecops-application:latest#g' k8s_deployment_service.yaml"
           sh "kubectl apply -f k8s_deployment_service.yaml"
         }
